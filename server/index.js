@@ -1,24 +1,9 @@
-const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const app = require('./app');
 
 dotenv.config();
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/movies', require('./routes/movies'));
-app.use('/api/blog', require('./routes/blog'));
-app.use('/api/contact', require('./routes/contact'));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/FilmFlare';
