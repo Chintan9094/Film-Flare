@@ -1,14 +1,7 @@
 {
-  "buildCommand": "cd client && npm install && npm run build",
-  "outputDirectory": "client/build",
-  "framework": "create-react-app",
-  "builds": [
-    { "src": "client/package.json", "use": "@vercel/static-build" }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+	"buildCommand": "npm --prefix client ci && npm --prefix client run build",
+	"outputDirectory": "client/build",
+	"rewrites": [
+		{ "source": "/(.*)", "destination": "/index.html" }
+	]
 }
