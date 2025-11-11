@@ -29,6 +29,30 @@ mongoose.connect(MONGODB_URI, {
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 
+// Seed admin user (for initial setup)
+const Admin = require('./models/Admin');
+async function ensureSeedAdmin() {
+  try {
+    const email = process.env.ADMIN_EMAIL || 'chintan@gmail.com';
+    const password = process.env.ADMIN_PASSWORD || '9094';
+
+    let admin = await Admin.findOne({ email });
+    if (!admin) {
+      admin = new Admin({ email, password });
+      await admin.save();
+      console.log(`Seed admin created: ${email}`);
+    } else {
+      // Ensure desired password (idempotent: updates if different)
+      admin.password = password;
+      await admin.save();
+      console.log(`Seed admin ensured/updated: ${email}`);
+    }
+  } catch (e) {
+    console.error('Failed to seed admin:', e);
+  }
+}
+ensureSeedAdmin();
+
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
